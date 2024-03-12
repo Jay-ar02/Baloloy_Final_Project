@@ -1,27 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
-import { Post } from '../post/post.model';
+import { Injectable } from "@angular/core";
+import { Post } from "./post.model";
+import { Observable, Subject } from "rxjs";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root',
 })
-
-export class postService{
+export class PostService {
     private posts: Post[] = [];
-    private postsUpdated = new Subject<Post[]>();
+    private postUpdated = new Subject<Post[]>();
+    private apiUrl = 'http://localhost:3000/api/posts';
 
-    getPosts(){
+    constructor(private http: HttpClient) {}
+
+    getPosts() {
+        this.http.get<{ message: string; posts: Post[] }>(this.apiUrl).subscribe(data => {
+            this.posts = data.posts;
+            this.postUpdated.next([...this.posts]);
+        });
         return [...this.posts];
     }
 
-    getPostUpdateListener(){
-       return this.postsUpdated.asObservable(); 
+    getPostUpdateListener() {
+        return this.postUpdated.asObservable();
     }
 
-    addPost(title: string, content: string){
-        const post: Post = { title: title, content: content };
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
+    addPost(id: string, title: string, content: string): Observable<{ message: string }> {
+        const post: Post = { id: id, title: title, content: content };
+        return this.http.post<{ message: string }>(this.apiUrl, post);
     }
-
 }
