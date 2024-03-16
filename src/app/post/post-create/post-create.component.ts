@@ -19,15 +19,17 @@ export class PostCreateComponent {
         if (form.invalid) {
             return;
         }
-        const id = this.generateOrRetrieveId(); // Corrected to call the instance method
+        const id = this.generateOrRetrieveId(); // Assuming this generates a unique ID for the new post
         const post: Post = {
-            id: id,
+            _id: id,
             title: form.value.title,
             content: form.value.content,
         };
-        this.postService.addPost(post.id, post.title, post.content).subscribe(response => {
+        this.postService.addPost(post._id, post.title, post.content).subscribe(response => {
             console.log('Post added successfully:', response);
             form.resetForm();
+            // Refresh the list of posts after successfully adding a new post
+            this.postService.getPosts();
         }, error => {
             console.error('Error adding post:', error);
         });

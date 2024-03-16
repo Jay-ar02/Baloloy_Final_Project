@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const postSchema = new Schema({
- title: String,
- content: String
-}, { collection: 'post' }); // Specify the collection name here
+const postSchema = mongoose.Schema({
+    title: {type: String, required: true},
+    content: { type: String, required: true}
 
-const Post = mongoose.model('Post', postSchema);
+});
+
+module.exports = mongoose.model('Post', postSchema);

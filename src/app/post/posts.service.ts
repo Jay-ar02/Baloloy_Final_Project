@@ -25,8 +25,13 @@ export class PostService {
         return this.postUpdated.asObservable();
     }
 
-    addPost(id: string, title: string, content: string): Observable<{ message: string }> {
-        const post: Post = { id: id, title: title, content: content };
+    addPost(_id: string, title: string, content: string): Observable<{ message: string }> {
+        const post: Post = { _id: _id, title: title, content: content };
         return this.http.post<{ message: string }>(this.apiUrl, post);
     }
+
+    // In your PostService
+deletePost(_id: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${_id}`);
+ }
 }
