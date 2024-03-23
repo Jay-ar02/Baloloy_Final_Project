@@ -3,7 +3,11 @@
         <mat-expansion-panel-header>{{ post.title }}</mat-expansion-panel-header>
         <p> {{post.content}} </p>
         <mat-action-row>
-            <button mat-button color="primary">EDIT</button>
+            <a [routerLink]="['/edit', post._id]">
+                <button mat-button color="primary" (click)="selectedPost = post; openEditModal()">EDIT</button>
+<app-post-edit *ngIf="selectedPost" [post]="selectedPost" (postUpdated)="onPostUpdated($event)"></app-post-edit>
+            </a>
+            
             <button mat-button color="warn" (click)="deletePost(post._id)">DELETE</button>
         </mat-action-row>
     </mat-expansion-panel>

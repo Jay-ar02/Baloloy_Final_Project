@@ -26,13 +26,13 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-    const post = new Post({
-        title: req.body.title,
-        content: req.body.content
-    });
-    post.save()
-    .then(savedPost => {
-        console.log(savedPost);
+const post = new Post({
+   title: req.body.title,
+   content: req.body.content
+});
+post.save()
+.then(savedPost => {
+console.log(savedPost);
         res.status(201).json({
             message: 'post added successfully'
         });
@@ -69,6 +69,26 @@ app.get('/api/posts', (req, res, next) => {
             posts: documents
         });
     });
+});
+
+app.put('/api/posts/:_id', (req, res, next) => {
+    const post = {
+        title: req.body.title,
+        content: req.body.content
+    };
+
+    Post.updateOne({ _id: req.params._id }, { $set: post }, { new: true })
+        .then(result => {
+            if (result.nModified === 0) {
+                // No documents were updated
+                return res.status(404).json({ message: 'Post not found' });
+            }
+            res.status(200).json({ message: 'Post updated successfully', post: result });
+        })
+        .catch(err => {
+            console.error('Error updating post:', err);
+            res.status(500).json({ message: 'Error updating post', error: err });
+        });
 });
 
 module.exports = app;

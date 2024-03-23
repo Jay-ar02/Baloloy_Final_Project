@@ -1,5 +1,7 @@
 <app-header></app-header>
 <main>
     <app-post-create (postCreated)="onPostAdded($event)"></app-post-create>
+    <!-- app.component.html -->
+    <app-post-edit [selectedPost]="selectedPost" [post]="yourPostVariable"></app-post-edit>
 <app-post-list [posts]="posts"></app-post-list>
 </main>
