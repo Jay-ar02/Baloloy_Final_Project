@@ -22,7 +22,24 @@
         ></textarea>
         <mat-error *ngIf="content.invalid"></mat-error>
     </mat-form-field>
-<br>
-    <button mat-flat-button type="submit">Save</button>
+    <!-- Image URL input -->
+    <mat-form-field>
+        <input
+        class="input"
+        matInput
+        type="text"
+        name="imageUrl"
+        ngModel
+        placeholder="Image URL"
+        #imageUrl="ngModel"
+        />
+        <mat-error *ngIf="imageUrl.invalid">
+        Please enter a valid image URL.
+        </mat-error>
+    </mat-form-field><br>
+    <button mat-flat-button type="submit">
+    <mat-icon>save</mat-icon> Save
+</button>
+
 </form>
 </mat-card>

@@ -2,13 +2,20 @@
     <mat-expansion-panel *ngFor="let post of posts">
         <mat-expansion-panel-header>{{ post.title }}</mat-expansion-panel-header>
         <p> {{post.content}} </p>
+        <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Post Image" class="post-image">
         <mat-action-row>
             <a [routerLink]="['/edit', post._id]">
-                <button mat-button color="primary" (click)="selectedPost = post; openEditModal()">EDIT</button>
+                <button mat-button color="primary" (click)="selectedPost = post; openEditModal()">
+                    <mat-icon>edit</mat-icon> Edit
+                </button>
+                
 <app-post-edit *ngIf="selectedPost" [post]="selectedPost" (postUpdated)="onPostUpdated($event)"></app-post-edit>
             </a>
             
-            <button mat-button color="warn" (click)="deletePost(post._id)">DELETE</button>
+            <button mat-button color="warn" (click)="deletePost(post._id)">
+    <mat-icon>delete</mat-icon> Delete
+</button>
+
         </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>

@@ -69,7 +69,8 @@ export class PostListComponent implements OnInit, OnDestroy {
     onUpdatePost(): void {
         console.log('onUpdatePost called'); // Debugging line
         if (this.currentPost && this.currentPost._id) {
-            this.postService.updatePost(this.currentPost._id, this.currentPost.title, this.currentPost.content).subscribe(updatedPost => {
+            this.postService.updatePost(this.currentPost._id, this.currentPost.title, this.currentPost.content, this.currentPost.imageUrl).subscribe(updatedPost => {
+
                 console.log('Post updated successfully', updatedPost);
                 // Update the local posts array with the updated post
                 const postIndex = this.posts.findIndex(post => post._id === updatedPost._id);

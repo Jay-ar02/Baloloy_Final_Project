@@ -9,8 +9,8 @@ import { Post } from './post/post.model';
 export class AppComponent {
   // storedPosts: Post[] = [];
   // onPostAdded(post: Post){
-    selectedPost: Post = { _id: '', title: '', content: '' }; // Example initial value
-    yourPostVariable: Post = { _id: '', title: '', content: '' }; // Example initial value
+    selectedPost: Post = { _id: '', title: '', content: '', imageUrl: '' }; // Include imageUrl
+ yourPostVariable: Post = { _id: '', title: '', content: '', imageUrl: '' }; // Include imageUrl
    
   //   this.storedPosts.push(post);
   // }

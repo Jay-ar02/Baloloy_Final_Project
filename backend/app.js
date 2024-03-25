@@ -26,13 +26,16 @@ app.use((req, res, next) => {
 });
 
 app.post("/api/posts", (req, res, next) => {
-const post = new Post({
-   title: req.body.title,
-   content: req.body.content
-});
-post.save()
-.then(savedPost => {
-console.log(savedPost);
+    console.log(req.body);
+    const post = new Post({
+        title: req.body.title,
+        content: req.body.content,
+        imageUrl: req.body.imageUrl
+    });
+
+    post.save()
+    .then(savedPost => {
+        console.log(savedPost);
         res.status(201).json({
             message: 'post added successfully'
         });
@@ -61,8 +64,7 @@ app.delete('/api/posts/:_id', async (req, res) => {
     }
 });
 
-
-app.get('/api/posts', (req, res, next) => {
+app.get('/api/posts', (req, res) => {
     Post.find().then(documents => {
         res.status(200).json({
             message: 'Posts fetched successfully',
@@ -74,7 +76,8 @@ app.get('/api/posts', (req, res, next) => {
 app.put('/api/posts/:_id', (req, res, next) => {
     const post = {
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        imageUrl: req.body.imageUrl // Ensure imageUrl is updated if needed
     };
 
     Post.updateOne({ _id: req.params._id }, { $set: post }, { new: true })

@@ -5,7 +5,6 @@ import { HttpClient } from "@angular/common/http";
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-
 @Injectable({
     providedIn: 'root',
 })
@@ -18,7 +17,7 @@ export class PostService {
 
     getAllPosts(): Observable<Post[]> {
         return this.http.get<Post[]>(this.apiUrl);
-     }
+    }
 
     getPosts() {
         this.http.get<{ message: string; posts: Post[] }>(this.apiUrl).subscribe(data => {
@@ -32,26 +31,22 @@ export class PostService {
         return this.postUpdated.asObservable();
     }
 
-    addPost(_id: string, title: string, content: string): Observable<{ message: string }> {
-        const post: Post = { _id: _id, title: title, content: content };
+    addPost(_id: string, title: string, content: string, imageUrl: string): Observable<{ message: string }> {
+        const post: Post = { _id: _id, title: title, content: content, imageUrl: imageUrl };
         return this.http.post<{ message: string }>(this.apiUrl, post);
     }
 
-    // In your PostService
-deletePost(_id: string): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/${_id}`);
- }
+    deletePost(_id: string): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${_id}`);
+    }
 
- // Inside your PostService
-
- updatePost(id: string, title: string, content: string): Observable<Post> {
-    const postData = { title: title, content: content };
-    return this.http.put<Post>(`${this.apiUrl}/${id}`, postData).pipe(
-        catchError(error => {
-            console.error('Error updating post:', error);
-            return throwError(() => error); // Updated to use the recommended approach
-        })
-    );
-}
-
+    updatePost(id: string, title: string, content: string, imageUrl: string): Observable<Post> {
+        const postData = { title: title, content: content, imageUrl: imageUrl };
+        return this.http.put<Post>(`${this.apiUrl}/${id}`, postData).pipe(
+            catchError(error => {
+                console.error('Error updating post:', error);
+                return throwError(() => error);
+            })
+        );
+    }
 }
