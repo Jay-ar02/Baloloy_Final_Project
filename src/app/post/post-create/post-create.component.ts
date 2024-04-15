@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { PostService } from '../posts.service';
 import { Post } from '../post.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-post-create',
@@ -15,7 +16,7 @@ export class PostCreateComponent {
     uploadedImageUrl: string = ''; // Initialize with an empty string
     @Output() postCreated = new EventEmitter<Post>();
 
-    constructor(private postService: PostService) {}
+    constructor(private postService: PostService, private router: Router) {}
 
     onAddPost(form: NgForm) {
         if (form.invalid) {
@@ -35,10 +36,12 @@ export class PostCreateComponent {
             // Refresh the list of posts after successfully adding a new post
             this.postService.getPosts();
             this.uploadedImageUrl = '';
+            // Navigate back to the post list page
+            this.router.navigate(['/posts']);
         }, error => {
             console.error('Error adding post:', error);
         });
-    }
+     }
 
     generateOrRetrieveId(): string {
         // Example: Generate a simple ID based on the current timestamp

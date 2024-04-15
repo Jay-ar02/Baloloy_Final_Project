@@ -1,10 +1,9 @@
-import { Component, Input, OnDestroy, OnInit, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import { Post } from "../post.model";
 import { Subscription } from "rxjs";
 import { PostService } from "../posts.service";
 import { ModalService } from "../modal.service";
-import { Router } from '@angular/router'; // Import Router
-
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-post-list',
@@ -18,17 +17,26 @@ export class PostListComponent implements OnInit, OnDestroy {
     selectedPost: Post | null = null;
     currentPost: Post | null = null;
     isEditMode = false;
-    isOpen = false; // Add this line to declare the isOpen property
+    isOpen = false;
+    currentPage: number;
+    postsPerPage: number;
+    totalPages: number = 0;
 
-
-    constructor(public postService: PostService, private modalService: ModalService, private router: Router) {} // Inject Router
+    constructor(
+        public postService: PostService,
+        private modalService: ModalService,
+        private router: Router
+    ) {
+        // Initialize currentPage and postsPerPage from the PostService
+        this.currentPage = this.postService.getCurrentPage();
+        this.postsPerPage = this.postService.getPostsPerPage();
+    }
 
     ngOnInit(): void {
         this.postService.getPosts();
-        this.postsSub = this.postService
-        .getPostUpdateListener()
-        .subscribe((posts: Post[]) => {
+        this.postsSub = this.postService.getPostUpdateListener().subscribe((posts: Post[]) => {
             this.posts = posts;
+            this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
         });
     }
 
@@ -36,12 +44,47 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.postsSub.unsubscribe();
     }
 
+    getPostsForCurrentPage() {
+        const startIndex = (this.currentPage - 1) * this.postsPerPage;
+        const endIndex = startIndex + this.postsPerPage;
+        return this.posts.slice(startIndex, endIndex);
+    }
+
+    nextPage(event: Event) {
+        event.preventDefault(); // Prevent the default action of the click event
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+        }
+    }
+    
+    previousPage(event: Event) {
+        event.preventDefault(); // Prevent the default action of the click event
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+        }
+    }
+
+    setCurrentPage(page: number, event: Event) {
+        event.preventDefault(); // Prevent the default action of the click event
+        this.currentPage = page;
+        this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+    }
+
+
     deletePost(_id: string) {
         this.postService.deletePost(_id).subscribe({
            next: (response) => {
              console.log('Post deleted successfully:', response.message);
              // Remove the post from the local array
              this.posts = this.posts.filter(post => post._id !== _id);
+             // Recalculate total pages
+             this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
+             // Adjust current page if it's now beyond the total pages
+             if (this.currentPage > this.totalPages) {
+                 this.currentPage = this.totalPages;
+             }
            },
            error: (error) => {
              console.error('Error deleting post:', error);

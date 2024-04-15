@@ -5,3 +5,74 @@
 .info-text {
     text-align: center;
 }
+
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+html,
+body {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  text-align: center;
+  background: #dde1e7;
+}
+.container {
+    /* background: #dde1e7; */
+    padding: 25px;
+    border-radius: 3px;
+    /* box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288); */
+    display: flex; /* Add this to use flexbox */
+    justify-content: center; /* Center the pagination horizontally */
+    align-items: center; /* Center the pagination vertically */
+   }
+   
+   .pagination {
+    display: flex;
+    list-style: none;
+    justify-content: center; /* Center the pagination items */
+   }
+   
+   .pagination li {
+    flex: 1;
+    margin: 0px 5px;
+    background: #dde1e7;
+    border-radius: 3px;
+    box-shadow: -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, 0.288);
+   }
+   
+   .pagination li a {
+    font-size: 14px; /* Reduce the font size */
+    text-decoration: none;
+    color: #4d3252;
+    height: 30px; /* Reduce the height */
+    width: 40px; /* Reduce the width */
+    display: block;
+    line-height: 30px; /* Adjust line-height to match the new height for vertical centering */
+    text-align: center; /* Center the text horizontally */
+   }
+   
+   .pagination li:first-child a {
+    width: 80px; /* Adjust the width for the first item */
+   }
+   
+   .pagination li:last-child a {
+    width: 60px; /* Adjust the width for the last item */
+   }
+   
+   .pagination a.active {
+      color: #0800ff !important; /* Use !important to force the style */
+   }
+   
+   .pagination li:first-child {
+    margin: 0 10px 0 0; /* Adjust the margin for the first item */
+   }
+   
+   .pagination li:last-child {
+    margin: 0 0 0 10px; /* Adjust the margin for the last item */
+   }

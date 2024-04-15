@@ -1,3 +1,26 @@
-mat-toolbar, p{
-    background-color: blue;
+/* header.component.css */
+
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px; /* Add padding to ensure content is not too close to the edges */
+}
+
+.custom-text {
+    font-size: 30px; /* Adjust the size as needed */
+    color: #FFFFFF; /* Secondary color: White for contrast */
+}
+
+.logout-icon {
+    margin-left: auto; /* Pushes the logout icon to the right */
+}
+
+button[mat-icon-button] {
+    color: #FFFFFF; /* Secondary color: White for contrast */
+}
+
+.custom-text .fab {
+    font-size: 24px; /* Adjust size as needed */
+    color: #3b5998; /* Facebook blue */
 }

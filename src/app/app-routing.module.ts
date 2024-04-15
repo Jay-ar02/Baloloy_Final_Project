@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PostEditComponent } from './post/post-edit/post-edit.component';
+import { PostCreateComponent } from './post/post-create/post-create.component';
 import { PostListComponent } from './post/post-list/post-list.component';
 
 const routes: Routes = [
-    // Other routes...
-    { path: 'posts', component: PostListComponent }, // Assuming 'PostListComponent' is the component for the post list page
-    { path: 'edit/:id', component: PostEditComponent },
-    // Other routes...
-   ];
+ { path: '', redirectTo: '/posts', pathMatch: 'full' },
+ { path: 'posts', component: PostListComponent },
+ { path: 'create', component: PostCreateComponent },
+];
 
 @NgModule({
  imports: [RouterModule.forRoot(routes)],
