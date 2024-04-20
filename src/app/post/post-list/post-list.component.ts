@@ -54,7 +54,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         event.preventDefault(); // Prevent the default action of the click event
         if (this.currentPage < this.totalPages) {
             this.currentPage++;
-            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+            this.navigateToPage(this.currentPage);
         }
     }
     
@@ -62,16 +62,19 @@ export class PostListComponent implements OnInit, OnDestroy {
         event.preventDefault(); // Prevent the default action of the click event
         if (this.currentPage > 1) {
             this.currentPage--;
-            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+            this.navigateToPage(this.currentPage);
         }
     }
 
     setCurrentPage(page: number, event: Event) {
         event.preventDefault(); // Prevent the default action of the click event
-        this.currentPage = page;
-        this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
+        this.currentPage = page; // Update the current page
+        this.navigateToPage(this.currentPage); // Navigate to the selected page
     }
 
+    navigateToPage(page: number) {
+        this.router.navigate(['/posts'], { queryParams: { page: page } });
+    }
 
     deletePost(_id: string) {
         this.postService.deletePost(_id).subscribe({
@@ -127,7 +130,7 @@ export class PostListComponent implements OnInit, OnDestroy {
                 // Close the modal
                 this.closeModal();
                 // Navigate back to the post list page
-                this.router.navigate(['/posts']); // Adjust the path as necessary
+                this.navigateToPage(this.currentPage);
             }, error => {
                 console.error('Error updating post', error);
             });
@@ -138,6 +141,6 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.isOpen = false;
         this.isEditMode = false; // Reset edit mode
         this.currentPost = null; // Reset the post being edited
-        this.router.navigate(['/posts']); // Navigate to the post list route
+        this.navigateToPage(this.currentPage);
     }
 }
