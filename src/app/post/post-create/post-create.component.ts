@@ -3,8 +3,11 @@ import { NgForm } from '@angular/forms';
 import { PostService } from '../posts.service';
 import { Post } from '../post.model';
 import { Router } from '@angular/router';
+<<<<<<< HEAD
 import { AuthService } from '../auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+=======
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 
 @Component({
     selector: 'app-post-create',
@@ -18,16 +21,21 @@ export class PostCreateComponent implements OnInit {
     uploadedImageUrl: string = ''; // Initialize with an empty string
     @Output() postCreated = new EventEmitter<Post>();
 
+<<<<<<< HEAD
     constructor(private postService: PostService, private router: Router, private authService: AuthService, private http: HttpClient) {} // Inject AuthService
 
     ngOnInit(): void {
         // Implementation of ngOnInit()
     }
+=======
+    constructor(private postService: PostService, private router: Router) {}
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 
     onAddPost(form: NgForm) {
         if (form.invalid) {
             return;
         }
+<<<<<<< HEAD
         this.authService.getCurrentUser().subscribe(user => {
             if (user) {
                 const userId = user.id; // Assuming id is the property representing user ID
@@ -59,8 +67,28 @@ export class PostCreateComponent implements OnInit {
             } else {
                 console.error('User not found');
             }
+=======
+        const id = this.generateOrRetrieveId(); // Assuming this generates a unique ID for the new post
+        const imageUrl = form.value.imageUrl || this.uploadedImageUrl;
+        const post: Post = {
+            _id: id,
+            title: form.value.title,
+            content: form.value.content,
+            imageUrl: imageUrl
+        };
+        this.postService.addPost(post._id, post.title, post.content, post.imageUrl).subscribe(response => {
+            console.log('Post added successfully:', response);
+            form.resetForm();
+            // Refresh the list of posts after successfully adding a new post
+            this.postService.getPosts();
+            this.uploadedImageUrl = '';
+            // Navigate back to the post list page
+            this.router.navigate(['/posts']);
+        }, error => {
+            console.error('Error adding post:', error);
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
         });
-    }
+     }
 
     // Assuming you have a method in PostService to add a post that includes authentication
     // If not, you'll need to implement it there

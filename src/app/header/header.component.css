@@ -23,6 +23,7 @@ button[mat-icon-button] {
 .custom-text .fab {
     font-size: 24px; /* Adjust size as needed */
     color: #3b5998; /* Facebook blue */
+<<<<<<< HEAD
 }
 
 .fixed-toolbar {
@@ -32,3 +33,6 @@ button[mat-icon-button] {
     width: 100%;
     z-index: 1000; /* Ensures the toolbar stays on top of other content */
   }
+=======
+}
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544

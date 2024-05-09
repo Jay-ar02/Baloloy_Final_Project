@@ -10,6 +10,7 @@ import { UnauthenticatedComponent } from './unauthenticated/unauthenticated.comp
 // import { PageNotFoundComponent } from './page-not-found/page-not-found.component'; // Adjust the import path as necessary
 
 const routes: Routes = [
+<<<<<<< HEAD
     { path: '', component: UnauthenticatedComponent }, // Default route
     { path: 'posts', component: PostListComponent, canActivate: [AuthGuard] }, // Protected route
     { path: 'create', component: PostCreateComponent }, // Now accessible to all users
@@ -18,6 +19,11 @@ const routes: Routes = [
     { path: 'register', component: RegisterComponent },
     // Add the wildcard route at the end
     // { path: '**', component: PageNotFoundComponent }, // Wildcard route
+=======
+ { path: '', redirectTo: '/posts', pathMatch: 'full' },
+ { path: 'posts', component: PostListComponent },
+ { path: 'create', component: PostCreateComponent },
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 ];
 
 @NgModule({

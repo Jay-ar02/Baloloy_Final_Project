@@ -38,7 +38,11 @@
             </mat-error>
         </mat-form-field>
         <!-- Display the image if the URL is present -->
+<<<<<<< HEAD
         <img *ngIf="imageUrl.value && isValidUrl(imageUrl.value)" [src]="imageUrl.value" alt="Post Image">
+=======
+        <img *ngIf="imageUrl.value" [src]="imageUrl.value" alt="Post Image" />
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
         <br>
         <button mat-flat-button type="submit">
         <mat-icon>save</mat-icon> Save

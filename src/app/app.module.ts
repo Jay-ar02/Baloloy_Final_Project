@@ -7,7 +7,10 @@ import { PostListComponent } from './post/post-list/post-list.component';
 import { HeaderComponent } from './header/header.component';
 import { PostEditComponent } from './post/post-edit/post-edit.component';
 import { FormsModule } from '@angular/forms';
+<<<<<<< HEAD
 import { ReactiveFormsModule } from '@angular/forms';
+=======
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
+<<<<<<< HEAD
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'; // Import HTTP_INTERCEPTORS
 import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './login/login.component';
@@ -27,6 +31,11 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { APP_INITIALIZER } from '@angular/core';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+=======
+import { HttpClientModule } from '@angular/common/http';
+
+
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 
 
 @NgModule({
@@ -36,11 +45,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     PostListComponent,
     HeaderComponent,
     PostEditComponent,
+<<<<<<< HEAD
     AuthComponent,
     LoginComponent,
     RegisterComponent,
     UnauthenticatedComponent,
     PageNotFoundComponent,
+=======
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
   ],
   imports: [
     BrowserModule,

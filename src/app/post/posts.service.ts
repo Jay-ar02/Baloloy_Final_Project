@@ -2,7 +2,11 @@ import { Injectable } from "@angular/core";
 import { Post } from "./post.model";
 import { Observable, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+<<<<<<< HEAD
 import { catchError, switchMap, map } from 'rxjs/operators';
+=======
+import { catchError, switchMap } from 'rxjs/operators';
+>>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 import { throwError } from 'rxjs';
 
 @Injectable({
