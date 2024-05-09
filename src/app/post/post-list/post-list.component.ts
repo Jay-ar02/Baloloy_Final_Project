@@ -1,18 +1,11 @@
-<<<<<<< HEAD
 import { Component, OnInit, OnDestroy, EventEmitter, Output } from "@angular/core";
-=======
-import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
->>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 import { Post } from "../post.model";
 import { Subscription } from "rxjs";
 import { PostService } from "../posts.service";
 import { ModalService } from "../modal.service";
 import { Router } from '@angular/router';
-<<<<<<< HEAD
 import { AuthService } from '../auth.service';
 import { User } from 'src/app/user.model'; // Adjust the import path as necessary
-=======
->>>>>>> ba2604454f8094e1daa51ea1927145584e870544
 
 @Component({
     selector: 'app-post-list',
@@ -29,7 +22,6 @@ export class PostListComponent implements OnInit, OnDestroy {
     currentPage: number;
     postsPerPage: number;
     totalPages: number = 0;
-<<<<<<< HEAD
     currentUser: User | null = null; // Define currentUser property
     errorMessage: string | null = null; // Add this line for error handling
 
@@ -40,13 +32,6 @@ export class PostListComponent implements OnInit, OnDestroy {
         private modalService: ModalService,
         private router: Router,
         private authService: AuthService 
-=======
-
-    constructor(
-        public postService: PostService,
-        private modalService: ModalService,
-        private router: Router
->>>>>>> ba2604454f8094e1daa51ea1927145584e870544
     ) {
         // Initialize currentPage and postsPerPage from the PostService
         this.currentPage = this.postService.getCurrentPage();
@@ -129,7 +114,6 @@ export class PostListComponent implements OnInit, OnDestroy {
 
     deletePost(_id: string) {
         this.postService.deletePost(_id).subscribe({
-<<<<<<< HEAD
             next: (response) => {
                 console.log('Post deleted successfully:', response.message);
                 // Remove the post from the local array
@@ -144,22 +128,6 @@ export class PostListComponent implements OnInit, OnDestroy {
             error: (error) => {
                 console.error('Error deleting post:', error);
             }
-=======
-           next: (response) => {
-             console.log('Post deleted successfully:', response.message);
-             // Remove the post from the local array
-             this.posts = this.posts.filter(post => post._id !== _id);
-             // Recalculate total pages
-             this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
-             // Adjust current page if it's now beyond the total pages
-             if (this.currentPage > this.totalPages) {
-                 this.currentPage = this.totalPages;
-             }
-           },
-           error: (error) => {
-             console.error('Error deleting post:', error);
-           }
->>>>>>> ba2604454f8094e1daa51ea1927145584e870544
         });
     }
 
@@ -210,12 +178,8 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.currentPost = null; // Reset the post being edited
         this.navigateToPage(this.currentPage);
     }
-<<<<<<< HEAD
 
     calculateTotalPages(): void {
         this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
     }
 }
-=======
-}
->>>>>>> ba2604454f8094e1daa51ea1927145584e870544
