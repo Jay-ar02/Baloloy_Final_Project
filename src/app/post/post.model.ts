@@ -1,5 +1,5 @@
 export interface Post {
-    _id: string; // Use _id to match MongoDB's convention
+    _id: string; 
     title: string;
     content: string;
     imageUrl: string;

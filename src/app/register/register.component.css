@@ -1,0 +1,49 @@
+/* src/app/register/register.component.css */
+.centered-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    text-align: center;
+}
+
+.register-form {
+    max-width: 400px; /* Adjust as needed */
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ced4da; /* Bootstrap border color */
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px; /* Adjust margin-top as needed */
+  }
+  

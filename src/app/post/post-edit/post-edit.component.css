@@ -86,3 +86,15 @@ button[type="submit"]:hover {
 .close-button:hover {
     color: #6fb9e4; /* Change color on hover */
 }
+
+.custom-icon {
+    font-size: 26px; /* Adjust the size as needed */
+}
+
+/* post-edit.component.css */
+
+.post-image {
+    max-width: 130px; /* Adjust the width as needed */
+    max-height: 130px; /* Adjust the height as needed */
+    object-fit: contain; /* Ensures the image maintains its aspect ratio */
+}

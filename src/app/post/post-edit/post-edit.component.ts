@@ -17,6 +17,7 @@ export class PostEditComponent implements OnInit {
  isUpdating = false;
  posts: Post[] = [];
  @Input() selectedPost!: Post;
+ selectedFile: File | null = null;
 
  constructor(
     private modalService: ModalService,
@@ -29,7 +30,7 @@ export class PostEditComponent implements OnInit {
  }
 
  ngOnInit(): void {
-   this.postService.getAllPosts().subscribe(response => {
+    this.postService.getAllPosts().subscribe(response => {
       if (Array.isArray(response)) {
         this.posts = response;
       } else {
@@ -45,14 +46,27 @@ export class PostEditComponent implements OnInit {
 
  onUpdatePost() {
     if (this.post && this.post._id) {
-      this.postService.updatePost(this.post._id, this.post.title, this.post.content, this.post.imageUrl)
-        .subscribe(updatedPost => {
-          this.closeModal();
-          this.refreshPosts();
-          this.postUpdated.emit(updatedPost);
-        }, error => {
-          console.error('Error updating post:', error);
-        });
+      if (this.selectedFile) {
+        // If a new file is selected, upload it and update the post with the new image URL
+        this.postService.updatePostWithImage(this.post._id, this.post.title, this.post.content, this.selectedFile)
+          .subscribe(updatedPost => {
+            this.closeModal();
+            this.refreshPosts();
+            this.postUpdated.emit(updatedPost);
+          }, error => {
+            console.error('Error updating post:', error);
+          });
+      } else {
+        // If no new file is selected, simply update the post without changing the image
+        this.postService.updatePost(this.post._id, this.post.title, this.post.content, this.post.imageUrl)
+          .subscribe(updatedPost => {
+            this.closeModal();
+            this.refreshPosts();
+            this.postUpdated.emit(updatedPost);
+          }, error => {
+            console.error('Error updating post:', error);
+          });
+      }
     }
  }
 
@@ -66,31 +80,60 @@ export class PostEditComponent implements OnInit {
  }
 
  refreshPosts() {
-   this.postService.getAllPosts().subscribe(response => {
-       this.posts = response;
-   });
+    this.postService.getAllPosts().subscribe(response => {
+      this.posts = response;
+    });
  }
 
  updatePost(post: Post) {
-   this.isUpdating = true;
+    this.isUpdating = true;
 
-   this.postService.updatePost(post._id, post.title, post.content, post.imageUrl).subscribe(updatedPost => {
-     if (Array.isArray(this.posts)) {
-       const index = this.posts.findIndex(p => p._id === updatedPost._id);
-       if (index !== -1) {
-         this.posts[index] = updatedPost;
-       }
-     } else {
-       console.error('Expected this.posts to be an array, but it is:', this.posts);
-     }
+    if (this.selectedFile) {
+      // If a new file is selected, upload it and update the post with the new image URL
+      this.postService.updatePostWithImage(post._id, post.title, post.content, this.selectedFile).subscribe(updatedPost => {
+        if (Array.isArray(this.posts)) {
+          const index = this.posts.findIndex(p => p._id === updatedPost._id);
+          if (index !== -1) {
+            this.posts[index] = updatedPost;
+          }
+        } else {
+          console.error('Expected this.posts to be an array, but it is:', this.posts);
+        }
 
-     this.postUpdated.emit(updatedPost);
-     this.isUpdating = false;
-     this.closeModal();
-   }, error => {
-     console.error('Update failed:', error);
-     this.isUpdating = false;
-     this.closeModal();
-   });
+        this.postUpdated.emit(updatedPost);
+        this.isUpdating = false;
+        this.closeModal();
+      }, error => {
+        console.error('Update failed:', error);
+        this.isUpdating = false;
+        this.closeModal();
+      });
+    } else {
+      // If no new file is selected, simply update the post without changing the image
+      this.postService.updatePost(post._id, post.title, post.content, post.imageUrl).subscribe(updatedPost => {
+        if (Array.isArray(this.posts)) {
+          const index = this.posts.findIndex(p => p._id === updatedPost._id);
+          if (index !== -1) {
+            this.posts[index] = updatedPost;
+          }
+        } else {
+          console.error('Expected this.posts to be an array, but it is:', this.posts);
+        }
+
+        this.postUpdated.emit(updatedPost);
+        this.isUpdating = false;
+        this.closeModal();
+      }, error => {
+        console.error('Update failed:', error);
+        this.isUpdating = false;
+        this.closeModal();
+      });
+    }
+ }
+
+ onFileSelected(event: any) {
+    if (event.target.files.length > 0) {
+      this.selectedFile = event.target.files[0];
+    }
  }
 }

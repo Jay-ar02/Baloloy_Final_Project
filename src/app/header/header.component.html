@@ -1,5 +1,46 @@
 <p>
-  <mat-toolbar style="background-color: #6fb9e4;">
-    <span>My Application</span>
+  <mat-toolbar class="fixed-toolbar" style="background-color: #6fb9e4;">
+   
+    <!-- fb icon -->
+   <span class="custom-text">
+      <i class="fab fa-facebook-f"></i>akebook
+   </span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    <!-- search icon -->
+   <button mat-icon-button>
+      <mat-icon>search</mat-icon>
+   </button>
+
+   <!-- add icon -->
+   <button mat-icon-button routerLink="/create">
+      <mat-icon>add</mat-icon>
+   </button>
+  
+   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+   <!-- menu icon -->
+   <button mat-icon-button>
+    <mat-icon>menu</mat-icon>
+   </button> 
+   
+   <!-- chat icon -->
+   <button mat-icon-button>     
+    <mat-icon>chat</mat-icon>
+   </button>
+   
+   <!-- notif icon -->
+   <button mat-icon-button>
+     <mat-icon>notifications</mat-icon>
+   </button> 
+    
+   <!-- Logout icon -->
+   <span class="logout-icon" *ngIf="authService.isLoggedIn()">
+    <button mat-icon-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </span>
+   
   </mat-toolbar>
-</p>
+ </p>

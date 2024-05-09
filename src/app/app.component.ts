@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Post } from './post/post.model'; 
+import { AuthService } from './post/auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -7,10 +9,12 @@ import { Post } from './post/post.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor(public authService: AuthService) {}
+
   // storedPosts: Post[] = [];
   // onPostAdded(post: Post){
-    selectedPost: Post = { _id: '', title: '', content: '', imageUrl: '' }; // Include imageUrl
- yourPostVariable: Post = { _id: '', title: '', content: '', imageUrl: '' }; // Include imageUrl
+    selectedPost: Post = { _id: '', title: '', content: '', imageUrl: '' };
+    yourPostVariable: Post = { _id: '', title: '', content: '', imageUrl: '' };
    
   //   this.storedPosts.push(post);
   // }

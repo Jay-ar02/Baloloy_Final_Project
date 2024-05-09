@@ -1,0 +1,15 @@
+<div class="centered-content">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <div class="form-group">
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" formControlName="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" formControlName="password" class="form-control">
+        </div>
+        <button type="submit" class="submit-button">Login</button>
+    </form>
+    <!-- Display the error message if it exists -->
+    <div *ngIf="loginError" class="error-message">{{ loginError }}</div>
+</div>
