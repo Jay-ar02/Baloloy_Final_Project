@@ -1,15 +1,27 @@
-<div class="centered-content">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <div class="form-group">
-            <label for="loginUsername">Username:</label>
-            <input type="text" id="loginUsername" formControlName="username" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="loginPassword">Password:</label>
-            <input type="password" id="loginPassword" formControlName="password" class="form-control">
-        </div>
-        <button type="submit" class="submit-button">Login</button>
+<div class="content">
+  <div class="flex-div">
+    <div class="name-content">
+      <h1 class="logo">Facebook</h1>
+      <p>Connect with friends and the world around you on Facebook.</p>
+      <!-- Recent Login UI -->
+      <!-- <div class="recent-login">
+        <h2>Recent Logins</h2>
+        <ul>
+          <li>John Doe - Today</li>
+          <li>Jane Smith - Yesterday</li>
+          <li>Sam Johnson - 2 days ago</li>
+        </ul>
+      </div> -->
+      
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <input type="text" placeholder="Username" formControlName="username" required />
+      <input type="password" placeholder="Password" formControlName="password" required>
+      <div *ngIf="loginError" class="error-message" style="color: red;">{{ loginError }}</div>
+      <button type="submit" class="login">Log In</button>
+      <a href="#">Forgot Password ?</a>
+      <hr>
+      <button type="button" class="create-account" (click)="navigateToRegister()">Create New Account</button>
     </form>
-    <!-- Display the error message if it exists -->
-    <div *ngIf="loginError" class="error-message">{{ loginError }}</div>
+  </div>
 </div>

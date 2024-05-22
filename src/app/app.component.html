@@ -10,8 +10,9 @@
 <app-post-list [posts]="posts"></app-post-list>
 </main> -->
 <app-header *ngIf="authService.isLoggedIn()"></app-header>
-
+<!-- <app-story *ngIf="authService.isLoggedIn()"></app-story>  -->
 <!-- Main Content -->
 <main>
+    
     <router-outlet></router-outlet>
 </main>

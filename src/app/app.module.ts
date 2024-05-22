@@ -27,7 +27,16 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { APP_INITIALIZER } from '@angular/core';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { LogoutDialogComponent } from './logout-dialog/logout-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LockoutDialogComponent } from './lockout-dialog/lockout-dialog.component';
+import { ChangePasswordComponent } from './change-password/change-password.component'; // Import MatTooltipModule
+import { SearchService } from './search.service';
+import { StoryCreateModalComponent } from './story-create-modal/story-create-modal.component';
+import { StoryComponent } from './story/story.component';
+import { ProfileComponent } from './profile/profile.component';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +50,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     RegisterComponent,
     UnauthenticatedComponent,
     PageNotFoundComponent,
+    LogoutDialogComponent,
+    LockoutDialogComponent,
+    ChangePasswordComponent,
+    StoryCreateModalComponent,
+    StoryComponent,
+    ProfileComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +72,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatIconModule,
     MatExpansionModule,
     HttpClientModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatTooltipModule // Add MatTooltipModule to the imports array
   ],
   providers: [
     AuthService,
@@ -66,6 +84,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       deps: [AuthService],
       multi: true
     },
+    SearchService,
     UserService,
     // Add AuthInterceptor to the list of providers
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

@@ -5,6 +5,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Story = require('./models/story');
 require('dotenv').config();
 
 // Enable CORS for all routes
@@ -62,7 +63,20 @@ const UserSchema = new mongoose.Schema({
     password: {
        type: String,
        required: true
-    }
+    },
+    email: { // Ensure this line is included
+       type: String,
+       required: true,
+       unique: true
+    },
+    failedLoginAttempts: {
+        type: Number,
+        default: 0
+     },
+     lockoutEnd: {
+        type: Date,
+        default: null
+     }
    });
    
    UserSchema.pre('save', async function(next) {
@@ -83,41 +97,53 @@ const User = mongoose.model('User', UserSchema);
 // Registration route
 app.post('/register', async (req, res) => {
     try {
+        const { username, password, email } = req.body;
+        if (!username ||!password ||!email) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
         const user = new User({
-            username: req.body.username,
-            password: req.body.password // Make sure to hash the password before saving
+            username: username,
+            password: password,
+            email: email
         });
-        await user.save();
-        res.status(201).send(user);
+
+        console.log('Saving user:', user);
+await user.save();
+console.log('User saved:', user);
+        res.status(201).json({ message: 'User registered successfully', user });
     } catch (error) {
-        res.status(400).send(error);
+        console.error('Error during registration:', error);
+        res.status(500).json({ message: 'Registration failed', error: error.message });
     }
 });
 
 // Login route
 app.post('/login', async (req, res) => {
     try {
-        console.log("Login attempt:", req.body); // Log the incoming request body
-        const { username, password } = req.body;
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log("User not found"); // Log when user is not found
-            return res.status(400).json({ message: 'User not found' });
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(400).json({ message: 'User not found' });
+      }
+
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        user.failedLoginAttempts++;
+        if (user.failedLoginAttempts >= 3) {
+          user.lockoutEnd = new Date(Date.now() + 10 * 60 * 1000); // Lockout for 10 minutes
         }
-
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            console.log("Invalid password"); // Log when password is invalid
-            return res.status(400).json({ message: 'Invalid password' });
-        }
-
-        // Generate and send token with an expiration time
-        const token = jwt.sign({ id: user._id, username: user.username }, jwtSecretKey, { expiresIn: '1m' });
-res.json({ token });
-
+        await user.save();
+        return res.status(400).json({ message: 'Invalid password' });
+      } else {
+        user.failedLoginAttempts = 0; // Reset failed attempts on successful login
+        await user.save();
+        const token = jwt.sign({ id: user._id, username: user.username }, jwtSecretKey, { expiresIn: '1h' });
+        res.json({ token });
+      }
     } catch (error) {
-        console.error('Login error:', error); // Log any other errors
-        res.status(500).json({ message: error.message });
+      console.error('Login error:', error);
+      res.status(500).json({ message: error.message });
     }
 });
 
@@ -205,5 +231,116 @@ app.put('/api/posts/:id', verifyToken, async (req, res) => {
         res.status(500).json({ message: 'Error updating post', error: err.message });
     }
 });
+
+app.post('/change-password', async (req, res) => {
+    try {
+        const { username, oldPassword, newPassword } = req.body;
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Incorrect old password' });
+        }
+
+        // Update the user's password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await User.findByIdAndUpdate(user._id, { password: hashedPassword }, { new: true });
+
+        res.status(200).json({ message: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        res.status(500).json({ message: 'Error changing password', error: error.message });
+    }
+});
+
+
+
+app.get('/users/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        } else {
+            res.status(200).json(user);
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).json({ message: 'Error fetching user', error: error.message });
+    }
+});
+
+app.post('/api/stories', async (req, res) => {
+    try {
+      const story = new Story(req.body);
+      await story.save();
+      res.status(201).json({ message: 'Story added successfully', story });
+    } catch (error) {
+      res.status(500).json({ message: 'Error adding story', error: error.message });
+    }
+  });
+
+  setInterval(async () => {
+    const dateThreshold = new Date();
+    dateThreshold.setDate(dateThreshold.getDate() - 1);
+    Story.find({ createdAt: { $lt: dateThreshold } }).then(story => {
+      Story.deleteOne({ _id: story._id });
+    });
+  }, 24 * 60 * 60 * 1000); // Run every 24 hours
+
+  const multer = require('multer'); // For handling multipart/form-data, which is primarily used for uploading files
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, `uploads/${Date.now().toISOString()}-${file.originalname}`)
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now().toISOString()}-${file.originalname}`)
+    }
+  })
+  
+  const upload = multer({ storage: storage })
+  
+  // Endpoint for uploading profile pictures
+  app.post('/upload-profile-picture', upload.single('image'), async (req, res) => {
+    try {
+      // req.file is the 'image' file
+      const filePath = req.file.path; // Path where the file is stored locally
+      const imageUrl = `http://localhost:3001/uploads/${Date.now().toISOString()}-${file.originalname}`; // Generate a URL for the uploaded image
+  
+      // Find the user by ID (assuming you have the user's ID available)
+      const userId = req.user.id; // This requires the verifyToken middleware to run before this route
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Update the user's profile picture URL
+      user.profilePictureUrl = imageUrl;
+      await user.save();
+  
+      res.status(200).json({ message: 'Profile picture updated successfully', imageUrl });
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      res.status(500).json({ message: 'Error updating profile picture', error: error.message });
+    }
+  });
+
+  app.get('/api/posts/:userId', verifyToken, async (req, res) => {
+    try {
+      const userId = req.params.userId;
+      const posts = await Post.find({ userId: userId });
+      if (!posts) {
+        return res.status(404).json({ message: 'No posts found for this user' });
+      }
+      res.status(200).json({ message: 'Posts fetched successfully', posts });
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      res.status(500).json({ message: 'Error fetching posts', error: error.message });
+    }
+  });
 
 module.exports = app;

@@ -39,10 +39,12 @@ export class PostEditComponent implements OnInit {
     });
  }
 
- editPost(): void {
-    this.isEditMode = true;
-    this.openEditModal();
- }
+ editPost(post: Post): void {
+  this.selectedPost = post;
+  this.openEditModal();
+  // Navigate programmatically without changing the URL
+  this.router.navigate([], { queryParams: { edit: post._id } });
+}
 
  onUpdatePost() {
     if (this.post && this.post._id) {
@@ -80,10 +82,16 @@ export class PostEditComponent implements OnInit {
  }
 
  refreshPosts() {
-    this.postService.getAllPosts().subscribe(response => {
-      this.posts = response;
-    });
- }
+  this.postService.getAllPosts().subscribe(response => {
+    (response: Post[]) => {
+      if (response) {
+        this.posts = response; // Directly assign the response (which is an array of Post objects) to this.posts
+      } else {
+        console.error('Expected an array of Post objects, but received:', response);
+      }
+    }
+  });
+}
 
  updatePost(post: Post) {
     this.isUpdating = true;

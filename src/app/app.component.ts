@@ -1,28 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Post } from './post/post.model'; 
 import { AuthService } from './post/auth.service';
-
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  constructor(public authService: AuthService) {}
-
-  // storedPosts: Post[] = [];
-  // onPostAdded(post: Post){
-    selectedPost: Post = { _id: '', title: '', content: '', imageUrl: '' };
-    yourPostVariable: Post = { _id: '', title: '', content: '', imageUrl: '' };
-   
-  //   this.storedPosts.push(post);
-  // }
+export class AppComponent implements OnInit, OnDestroy {
+  constructor(public authService: AuthService, private router: Router) {}
+  selectedPost: Post = { _id: '', title: '', content: '', imageUrl: '' };
+  yourPostVariable: Post = { _id: '', title: '', content: '', imageUrl: '' };
   posts: Post[] = [];
+  title: String = 'Baloloy-final-project';
+
+  ngOnInit() {
+    this.authService.startTokenExpirationCheck().subscribe(() => {
+      // Perform token expiration check
+    });
+  }
+  
 
   onPostAdded(post: Post) {
     this.posts.push(post);
   }
 
-  title: String = 'Baloloy-final-project';
+  ngOnDestroy() {
+  this.authService.stopTokenExpirationCheck();
+}
+
 }

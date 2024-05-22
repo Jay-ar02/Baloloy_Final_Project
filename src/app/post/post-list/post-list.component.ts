@@ -4,8 +4,12 @@ import { Subscription } from "rxjs";
 import { PostService } from "../posts.service";
 import { ModalService } from "../modal.service";
 import { Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { User } from 'src/app/user.model'; // Adjust the import path as necessary
+import { User } from 'src/app/user.model'; 
+import { Story } from "src/app/story.model";
+import { map } from 'rxjs/operators';
+
 
 @Component({
     selector: 'app-post-list',
@@ -24,6 +28,8 @@ export class PostListComponent implements OnInit, OnDestroy {
     totalPages: number = 0;
     currentUser: User | null = null; // Define currentUser property
     errorMessage: string | null = null; // Add this line for error handling
+    stories: Story[] = [];
+
 
     @Output() postUpdated = new EventEmitter<Post>(); // Declare the EventEmitter
 
@@ -31,53 +37,38 @@ export class PostListComponent implements OnInit, OnDestroy {
         public postService: PostService,
         private modalService: ModalService,
         private router: Router,
-        private authService: AuthService 
+        private authService: AuthService,
+        private http: HttpClient
     ) {
         // Initialize currentPage and postsPerPage from the PostService
         this.currentPage = this.postService.getCurrentPage();
         this.postsPerPage = this.postService.getPostsPerPage();
     }
 
-   ngOnInit(): void {
-        this.postService.getPosts();
-        this.postsSub = this.postService.getPostUpdateListener().subscribe((posts: Post[]) => {
-            this.posts = posts;
-            this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
+    ngOnInit(): void {
+        this.postService.getPosts().subscribe({
+            next: (data: { message: string; posts: Post[] }) => {
+                this.posts = data.posts;
+                this.totalPages = Math.ceil(this.posts.length / this.postsPerPage);
+            },
+            error: (error: HttpErrorResponse) => {
+                console.error('Error fetching posts:', error);
+            }
         });
-    }
+    
+        // Fetch stories
+        this.http.get('/api/stories', { responseType: 'json' })
+        .pipe(map(response => response as Story[]))
+        .subscribe(stories => {
+           this.stories = stories;
+         });
+       
+        }    
 
     ngOnDestroy(): void {
         if (this.postsSub) {
             this.postsSub.unsubscribe();
         }
-    }
-
-    getPostsForCurrentPage() {
-        const startIndex = (this.currentPage - 1) * this.postsPerPage;
-        const endIndex = startIndex + this.postsPerPage;
-        return this.posts.slice(startIndex, Math.min(endIndex, this.posts.length));
-    }
-
-    nextPage(event: Event) {
-        event.preventDefault(); // Prevent the default action of the click event
-        if (this.currentPage < this.totalPages) {
-            this.currentPage++;
-            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
-        }
-    }
-
-    previousPage(event: Event) {
-        event.preventDefault(); // Prevent the default action of the click event
-        if (this.currentPage > 1) {
-            this.currentPage--;
-            this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
-        }
-    }
-
-    setCurrentPage(page: number, event: Event) {
-        event.preventDefault(); // Prevent the default action of the click event
-        this.currentPage = page;
-        this.postService.setCurrentPage(this.currentPage); // Update the current page in the service
     }
 
     getPostsForCurrentPage() {

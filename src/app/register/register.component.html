@@ -1,15 +1,19 @@
-<div class="centered-content">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-      <div class="form-group">
-        <label for="registerUsername">Username:</label>
-        <input type="text" id="registerUsername" formControlName="username" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="registerPassword">Password:</label>
-        <input type="password" id="registerPassword" formControlName="password" class="form-control">
-      </div>
-      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div> <!-- Display error message -->
-      <button type="submit" class="submit-button">Register</button>
+<div class="content">
+  <div class="flex-div">
+    <div class="name-content">
+      <h1 class="logo">Facebook</h1>
+      <p>Connect with friends and the world around you on Facebook.</p>
+    </div>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- Add this inside your email input field -->
+      <input type="email" placeholder="Enter your email" formControlName="email" required />
+      <input type="text" placeholder="Username" formControlName="username" required />
+      <input type="password" placeholder="Password" formControlName="password" required>
+      <div *ngIf="errorMessage" class="error-message" style="color: red;">{{ errorMessage }}</div> <!-- Display error message -->
+      <button type="submit" class="login">Register</button>
+      <!-- <a href="#">Forgot Password?</a> -->
+      <hr>
+      <button type="button" class="create-account" (click)="navigateToLogin()">Already have an account</button>
     </form>
   </div>
-  
+</div>
